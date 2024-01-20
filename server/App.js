@@ -10,6 +10,7 @@ const GroupMembers = require('./src/models/GroupMembers')
 const Message = require('./src/models/Message')
 const authRoutes = require('./src/routes/authRoutes')
 const chatRoutes = require('./src/routes/chatRoutes')
+const groupRoutes = require('./src/routes/groupRoutes')
 
 const app = express()
 app.use(morgan('combined'))
@@ -22,6 +23,7 @@ User.belongsToMany(Chat, {through: GroupMembers})
 
 
 app.use(authRoutes)
+app.use(groupRoutes)
 app.use(chatRoutes)
 
 sequelize.sync()
