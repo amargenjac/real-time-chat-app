@@ -44,6 +44,7 @@ module.exports = {
                     2. It must be at least 3 characters in length and not greater than 32 characters in length.
                     <br>`
                 })
+                break
               }
               default:
                 res.status(400).send({

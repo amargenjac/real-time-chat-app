@@ -18,9 +18,9 @@ app.use(cors())
 Chat.belongsToMany(User, {through: UserChat})
 User.belongsToMany(Chat, {through: UserChat})
 
-app.use(authRoutes)
-
 Message.belongsTo(UserChat)
+
+app.use(authRoutes)
 
 sequelize.sync({force: true})
    .then(result => {

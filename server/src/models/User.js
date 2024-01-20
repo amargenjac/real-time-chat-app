@@ -1,4 +1,5 @@
 const Sequelize = require('sequelize')
+const { Op } = require("sequelize")
 const sequelize = require('../utils/database')
 
 
@@ -30,3 +31,15 @@ const User = sequelize.define('user', {
   })
 
 module.exports = User
+
+module.exports.GetUsers = async (id) => {
+  const users = await User.findAll({
+   attributes: ['id', 'username', 'is_online'],
+    where: {
+      id: {
+        [Op.ne]: id
+      }
+    }
+  })
+  return users
+}

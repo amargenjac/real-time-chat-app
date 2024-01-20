@@ -1,15 +1,19 @@
 const User = require('../models/User')
-const jwt = require('jsonwebtoken');
-const config = require('../config/config')
+const AuthUtils = require('../utils/authUtils')
 
 module.exports = { 
     async register (req, res){
         try{
             let body = req.body
+            const hashedPassword = await AuthUtils.encryptPassword(body)
             body.is_online = 0
+            body.password = hashedPassword
             const user = await User.create(body)
-            res.send(user.toJSON())
+            res.send({
+                success: 'Success!'
+            })
         } catch (err){
+            console.error(err)
             res.status(400).send({
                 error: 'Email already exists. Please try another email.'
             })
@@ -26,8 +30,8 @@ module.exports = {
                     error:'The login information was incorrect'
                 })
             }
-            const isPasswordValid = password === user.password
-            if(!isPasswordValid){
+            const isValid = await AuthUtils.isPasswordValid(password, user.password)
+            if(!isValid){
                 return res.status(400).send({
                     error:'The login information was incorrect'
                 })
@@ -37,11 +41,22 @@ module.exports = {
                     id: user.id
                 }
             })
-            const token = jwt.sign({ userId: user.id }, config.jwtSecret, {
-                expiresIn: '1h',
-                });
-            return res.send({ token })
+
+            user = await User.findOne({
+                where: {email: email}
+            })
+
+            const users = await User.GetUsers(user.id)
+
+            delete user.dataValues.password
+            const token = AuthUtils.jwtSignUser(user)
+            return res.send({
+                token: token,
+                user: user,
+                users: users
+                })
         } catch(err){
+            console.error(err)
            return res.status(500).send({
             err
            })

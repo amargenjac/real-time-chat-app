@@ -11,7 +11,6 @@ const Chat = sequelize.define('chat', {
     },
     name: {
       type: Sequelize.STRING,
-      allowNull: false,
     },
     is_group: {
       type: Sequelize.TINYINT,
