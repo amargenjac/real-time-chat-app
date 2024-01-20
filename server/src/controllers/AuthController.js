@@ -1,12 +1,13 @@
 const User = require('../models/User')
 const AuthUtils = require('../utils/authUtils')
+const {GetUsers} = require('../services/UserService')
 
 module.exports = { 
     async register (req, res){
         try{
             let body = req.body
             const hashedPassword = await AuthUtils.encryptPassword(body)
-            body.is_online = 0
+            body.isOnline = 0
             body.password = hashedPassword
             const user = await User.create(body)
             res.send({
@@ -46,7 +47,7 @@ module.exports = {
                 where: {email: email}
             })
 
-            const users = await User.GetUsers(user.id)
+            const users = await GetUsers(user.id)
 
             delete user.dataValues.password
             const token = AuthUtils.jwtSignUser(user)

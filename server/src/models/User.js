@@ -24,7 +24,7 @@ const User = sequelize.define('user', {
       type: Sequelize.STRING,
       allowNull: false,
     },
-    is_online: {
+    isOnline: {
         type: Sequelize.TINYINT,
         allowNull: false,
       }
@@ -34,7 +34,7 @@ module.exports = User
 
 module.exports.GetUsers = async (id) => {
   const users = await User.findAll({
-   attributes: ['id', 'username', 'is_online'],
+   attributes: ['id', 'username', 'isOnline'],
     where: {
       id: {
         [Op.ne]: id

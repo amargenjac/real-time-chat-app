@@ -2,7 +2,7 @@ const Sequelize = require('sequelize')
 const sequelize = require('../utils/database')
 
 
-const UserChat = sequelize.define('user_chat', {
+const GroupMembers = sequelize.define('groupMembers', {
     id: {
       type: Sequelize.INTEGER,
       autoIncrement: true,
@@ -11,4 +11,4 @@ const UserChat = sequelize.define('user_chat', {
     },
   })
 
-module.exports = UserChat
+module.exports = GroupMembers

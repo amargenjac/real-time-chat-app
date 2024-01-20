@@ -6,21 +6,23 @@ const config = require('./src/config/config')
 const sequelize = require('./src/utils/database')
 const User = require('./src/models/User')
 const Chat = require('./src/models/Chat')
-const UserChat = require('./src/models/UsersChat')
+const GroupMembers = require('./src/models/GroupMembers')
 const Message = require('./src/models/Message')
 const authRoutes = require('./src/routes/authRoutes')
+const chatRoutes = require('./src/routes/chatRoutes')
 
 const app = express()
 app.use(morgan('combined'))
 app.use(bodyParser.json())
 app.use(cors())
 
-Chat.belongsToMany(User, {through: UserChat})
-User.belongsToMany(Chat, {through: UserChat})
+Message.belongsTo(Chat)
+Chat.belongsToMany(User, {through: GroupMembers})
+User.belongsToMany(Chat, {through: GroupMembers})
 
-Message.belongsTo(UserChat)
 
 app.use(authRoutes)
+app.use(chatRoutes)
 
 sequelize.sync({force: true})
    .then(result => {
