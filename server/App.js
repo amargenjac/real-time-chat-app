@@ -24,7 +24,7 @@ User.belongsToMany(Chat, {through: GroupMembers})
 app.use(authRoutes)
 app.use(chatRoutes)
 
-sequelize.sync({force: true})
+sequelize.sync()
    .then(result => {
       console.log(result)
       app.listen(config.port)

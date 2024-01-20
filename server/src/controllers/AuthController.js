@@ -3,7 +3,7 @@ const AuthUtils = require('../utils/authUtils')
 const {GetUsers} = require('../services/UserService')
 
 module.exports = { 
-    async register (req, res){
+    async Register (req, res){
         try{
             let body = req.body
             const hashedPassword = await AuthUtils.encryptPassword(body)
@@ -22,7 +22,7 @@ module.exports = {
             })
         }
     },
-    async login (req, res){
+    async Login (req, res){
         try{
             const {email, password} = req.body
             let user = await User.findOne({

@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 const Config = require('../config/config')  
 const User = require('../models/User')
-exports.validateToken = async (req, res, next) => {
+exports.ValidateToken = async (req, res, next) => {
     try {
         const token = req.header('Authorization').replace('Bearer ', '')
         const decoded = jwt.verify(token, Config.jwtSecret)

@@ -62,9 +62,10 @@ exports.CreateChat = async (req, res) => {
         } else{
             const messages = await Message.findAll({
                 where:{
-                    id: chat.id
+                    chatId: chat.id
                 }
             })
+            console.log(chat.id)
             res.status(200).json({
                 status: 'Success',
                 chatId: chat.id,
@@ -108,7 +109,7 @@ exports.GetChat = async (req, res) => {
     }
     const messages = await Message.findAll({
         where:{
-            id: chat.id
+            chatId: chat.id
         },
         raw: true
     })
