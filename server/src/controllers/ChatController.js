@@ -1,16 +1,26 @@
 const Chat = require('../models/Chat')
 const GroupMembers = require('../models/GroupMembers')
 const Message = require('../models/Message')
-const {
-    getPrivateChat
-} = require('../services/ChatService')
+const User = require('../models/User')
+const {getPrivateChat} = require('../services/ChatService')
 
 
 exports.getChat = async (req, res) => {
         const senderId = req.body.user.id
         const receiverId = req.query.id
+        const receiver = await User.findOne({
+            where:{
+                id: receiverId
+            }
+        })
+        console.log(receiver)
+        if(!receiver){
+            return res.status(404).json({
+                status: "Error",
+                message: "User not found"
+            })
+        }
         const chat = await getPrivateChat(senderId, receiverId)
-        console.log(chat)
         if (!chat){
             const newChatData = {
                 name: 'privateChat',
@@ -35,7 +45,8 @@ exports.getChat = async (req, res) => {
                     }
                 })
                 res.status(200).json({
-                    message: 'Success',
+                    status: 'Success',
+                    chatId: newChat.id,
                     messages: messages
                 })
 
@@ -50,7 +61,8 @@ exports.getChat = async (req, res) => {
                 }
             })
             res.status(200).json({
-                message: 'Success',
+                status: 'Success',
+                chatId: chat.id,
                 messages: messages
             })
         }

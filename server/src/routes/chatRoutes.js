@@ -2,10 +2,10 @@ const express = require('express')
 const {
     getChat
 } = require('../controllers/ChatController')
-const Middleware = require('../middleware/checkAuthLogin')
+const {validateToken} = require('../middleware/checkAuthLogin')
 
 const router = new express.Router()
 
-router.get('/get-chat', Middleware.validateToken, getChat)
+router.get('/get-chat', validateToken, getChat)
 
 module.exports = router

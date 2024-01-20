@@ -10,13 +10,15 @@ module.exports = {
             body.isOnline = 0
             body.password = hashedPassword
             const user = await User.create(body)
-            res.send({
-                success: 'Success!'
+            return res.status(200).json({
+                status: 'Success',
+                message: 'User has been registered'
             })
         } catch (err){
             console.error(err)
-            res.status(400).send({
-                error: 'Email already exists. Please try another email.'
+            return res.status(400).json({
+                status: 'Error',
+                message:'Email already exists. Please try another email.'
             })
         }
     },
@@ -27,14 +29,16 @@ module.exports = {
                 where: {email: email}
             })
             if(!user){
-                return res.status(400).send({
-                    error:'The login information was incorrect'
+                return res.status(400).json({
+                    status: 'Error',
+                    message:'The login information was incorrect'
                 })
             }
             const isValid = await AuthUtils.isPasswordValid(password, user.password)
             if(!isValid){
-                return res.status(400).send({
-                    error:'The login information was incorrect'
+                return res.status(400).json({
+                    status: 'Error',
+                    message:'The login information was incorrect'
                 })
             }
             await User.update({is_online: 1}, {
@@ -51,15 +55,16 @@ module.exports = {
 
             delete user.dataValues.password
             const token = AuthUtils.jwtSignUser(user)
-            return res.send({
+            return res.status(200).json({
+                status: 'Success',
                 token: token,
-                user: user,
                 users: users
                 })
         } catch(err){
             console.error(err)
-           return res.status(500).send({
-            err
+           return res.status(500).json({
+            status: 'Error',
+            message: 'Something went wrong'
            })
         }
     }
