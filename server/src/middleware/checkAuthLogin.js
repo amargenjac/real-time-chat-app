@@ -1,19 +1,32 @@
 const jwt = require('jsonwebtoken');
-const User = require('../models/User');
 const Config = require('../config/config')  
-
-const validateToken = async (req, res, next) => {
+const User = require('../models/User')
+exports.validateToken = async (req, res, next) => {
     try {
         const token = req.header('Authorization').replace('Bearer ', '')
         const decoded = jwt.verify(token, Config.jwtSecret)
 
-        console.log(decoded)
+        
+        const user = await User.findOne({
+            where:{
+                id: decoded.user.id
+            }
+        })
+        console.log(user)
 
-        req.body.user = decoded.user
+        if(!user){
+            return res.status(401).send({
+                status:'Error',
+                message:'Not authorized'
+            })
+        }
+
+        req.body.user = user
         next()
     } catch (e) {
-        res.status(401).send({error: 'Authentication problem!!'})
+        return res.status(401).send({
+            status:'Error',
+            message:'Authorization problem'
+        })
     }
 };
-
-module.exports = {validateToken};

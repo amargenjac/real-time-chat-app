@@ -5,15 +5,20 @@ const User = require('../models/User')
 const {getPrivateChat} = require('../services/ChatService')
 
 
-exports.getChat = async (req, res) => {
+exports.CreateChat = async (req, res) => {
         const senderId = req.body.user.id
-        const receiverId = req.query.id
+        const receiverId = req.body.receiverId
         const receiver = await User.findOne({
             where:{
                 id: receiverId
             }
         })
-        console.log(receiver)
+        if(senderId == receiverId){
+            return res.status(404).json({
+                status: "Error",
+                message: "Self messages not supported"
+            })
+        }
         if(!receiver){
             return res.status(404).json({
                 status: "Error",
@@ -68,3 +73,48 @@ exports.getChat = async (req, res) => {
         }
 
     }
+exports.GetChat = async (req, res) => {
+    const chatId = req.query.id
+    const senderId = req.body.user.id
+
+    const chat = await Chat.findOne({
+        where:{
+            id: chatId
+        }
+    })
+    if(!chat){
+        return res.status(404).json({
+            status: 'Error',
+            message: 'Chat not found',
+        })
+    }
+
+    const chatMembers = await GroupMembers.findAll({
+        where:{
+            chatId: chat.id
+        }
+    })
+    let isMemberValid = false
+    chatMembers.forEach(member => {
+        if(member.userId == senderId){
+            isMemberValid = true
+        }
+    });
+    if(!isMemberValid){
+        return res.status(404).json({
+            status: 'Error',
+            message: 'User not part of the chat',
+        }) 
+    }
+    const messages = await Message.findAll({
+        where:{
+            id: chat.id
+        },
+        raw: true
+    })
+    res.status(200).json({
+        status: 'Success',
+        message: messages
+    })
+
+}

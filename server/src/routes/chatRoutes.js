@@ -1,11 +1,13 @@
 const express = require('express')
 const {
-    getChat
+    CreateChat,
+    GetChat
 } = require('../controllers/ChatController')
 const {validateToken} = require('../middleware/checkAuthLogin')
 
 const router = new express.Router()
 
-router.get('/get-chat', validateToken, getChat)
+router.put('/create-chat', validateToken, CreateChat)
+router.get('/chat', validateToken, GetChat)
 
 module.exports = router
