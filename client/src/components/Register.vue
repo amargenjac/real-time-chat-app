@@ -78,7 +78,7 @@ h1 {
 button {
     width: 100%;
     padding: 10px;
-    background-color: #4CAF50;
+    background-color: lightseagreen;
     color: white;
     border: none;
     border-radius: 5px;

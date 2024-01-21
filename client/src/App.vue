@@ -7,7 +7,7 @@
         <router-view />
       </div>
     </div>
-    <footer class="bg-light text-center p-3">
+    <footer class="bg-light text-center p-3 footer">
       <br>
       <p>
         Created By
@@ -33,5 +33,11 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+}
+
+.footer {
+  position: fixed;
+  bottom: 0;
+  left: 47%;
 }
 </style>

@@ -44,7 +44,12 @@ export default {
           email: this.email,
           password: this.password
         })
-        console.log(response)
+        this.$store.dispatch('setToken', response.data.token)
+        let users = response.data.users
+        this.$router.push({
+          name: 'HomeView',
+          params: { users }
+        })
       } catch (e) {
         this.error = e.response.data.message
       }
