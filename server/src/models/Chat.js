@@ -1,6 +1,5 @@
 const Sequelize = require('sequelize')
 const sequelize = require('../utils/database')
-const GroupMembers = require('./GroupMembers')
 
 
 const Chat = sequelize.define('chat', {
@@ -9,14 +8,14 @@ const Chat = sequelize.define('chat', {
     defaultValue: Sequelize.UUIDV4,
     primaryKey: true
   },
-    name: {
-      type: Sequelize.STRING,
-    },
-    isGroup: {
-      type: Sequelize.TINYINT,
-      allowNull: false,
-    }
-  })
+  name: {
+    type: Sequelize.STRING,
+  },
+  isGroup: {
+    type: Sequelize.TINYINT,
+    allowNull: false,
+  }
+})
 
 
 module.exports = Chat
