@@ -1,6 +1,5 @@
 const GroupMembers = require('../models/GroupMembers')
 const Chat = require('../models/Chat')
-const db = require('../utils/database')
 
 exports.getPrivateChat = async (userId, receiverId) => {
     const usersChats = await getUsersChats(userId)

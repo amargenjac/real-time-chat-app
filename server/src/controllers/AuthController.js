@@ -41,7 +41,7 @@ module.exports = {
                     message:'The login information was incorrect'
                 })
             }
-            await User.update({is_online: 1}, {
+            await User.update({isOnline: true}, {
                 where: {
                     id: user.id
                 }
@@ -67,5 +67,5 @@ module.exports = {
             message: 'Something went wrong'
            })
         }
-    }
+        }
 }
