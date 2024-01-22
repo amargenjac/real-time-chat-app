@@ -19,6 +19,7 @@
         </v-navigation-drawer>
 
         <v-main class="d-flex align-center justify-center" style="min-height:max-content;">
+            <ChatView :messages="messagesList"></ChatView>
         </v-main>
     </v-layout>
 </template>
@@ -26,6 +27,7 @@
 <script>
 import UserService from '../services/UserService'
 import ChatView from './Chat.vue'
+import ChatService from '../services/ChatService'
 export default {
     name: 'HomeView',
     components: {
@@ -34,22 +36,25 @@ export default {
     data () {
         return {
             chats: null,
-            isChatOpen: false
+            isChatOpen: false,
+            messagesList: []
         }
     },
-
     async mounted () {
-        const response = await UserService.getUserChats(this.$store.state.token)
+        const response = await UserService.getUserChats(localStorage.getItem('token'))
         console.log(response.data.userChats)
         this.chats = response.data.userChats
         console.log(this.chats)
     },
 
     methods: {
-        openChat (chat) {
-            console.log('in function')
-            console.log(chat)
+        async openChat (chat) {
             this.$router.push({ name: 'HomeView', query: { id: chat.id } })
+            const params = {
+                id: chat.id
+            }
+            const response = await ChatService.getChatMessages(localStorage.getItem('token'), params)
+            this.messagesList = response.data.message
         }
     }
 }

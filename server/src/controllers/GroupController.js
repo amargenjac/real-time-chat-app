@@ -1,5 +1,5 @@
 const Message = require('../models/Message')
-const {Op} = require('sequelize')
+const { Op } = require('sequelize')
 const Chat = require('../models/Chat')
 const User = require('../models/User')
 const GroupMembers = require('../models/GroupMembers')
@@ -13,8 +13,8 @@ exports.CreateGroup = async (req, res) => {
     let response = {}
 
     const users = await User.findAll({
-        where:{
-            id:{
+        where: {
+            id: {
                 [Op.in]: groupMembers
             }
         },
@@ -42,10 +42,10 @@ exports.CreateGroup = async (req, res) => {
     response.status = 'Success'
     response.members = addedGroupMembers
     response.chat = chat
-    if(missingUsers.length > 0){
+    if (missingUsers.length > 0) {
         response.missingUsers = missingUsers
     }
-    
+
     res.status(200).json(response)
 
 }

@@ -1,5 +1,5 @@
 const express = require('express')
-const {ValidateToken} = require('../middleware/checkAuthLogin')
+const { ValidateToken } = require('../middleware/checkAuthLogin')
 const { CreateGroup } = require('../controllers/GroupController')
 
 

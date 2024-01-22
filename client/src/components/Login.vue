@@ -44,7 +44,7 @@ export default {
           email: this.email,
           password: this.password
         })
-        this.$store.dispatch('setToken', response.data.token)
+        localStorage.setItem('token', response.data.token)
         let users = response.data.users
         this.$router.push({
           name: 'HomeView',
