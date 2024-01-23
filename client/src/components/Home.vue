@@ -5,7 +5,8 @@
         <v-navigation-drawer>
             <v-list>
                 <v-list-item title="Online"></v-list-item>
-                <v-list-item v-for="(user, index) in connectedUsers" :key="index" @click="startChatWithConnecteduser(chat)">
+                <v-list-item v-for="(user, index) in connectedUsers" :key="index"
+                    @click="startChatWithConnectedUser(user.userId)">
                     <v-list-item-content>
                         <v-btn variant="tonal" class="chat-card">
                             <v-list-item-title>{{ user.username }}</v-list-item-title>
@@ -58,7 +59,8 @@ export default {
         try {
             const user = JSON.parse(localStorage.getItem('user'))
             const username = user.username
-            socket.auth = { username }
+            const userId = user.id
+            socket.auth = { username, userId }
             socket.connect()
             const response = await UserService.getUserChats(localStorage.getItem('token'))
             this.chats = response.data.userChats
@@ -77,15 +79,33 @@ export default {
             this.messagesList = response.data.message
             this.isChatOpen = true
         },
-        changes (newConnected) {
-            this.onlineUsers = newConnected
+        async startChatWithConnectedUser (userId) {
+            try {
+                console.log(userId)
+                const response = await ChatService.startChatWithUser(localStorage.getItem('token'), { receiverId: userId })
+                if (response.data.status == 'Success') {
+                    this.$router.push({ name: 'HomeView', query: { id: response.data.chatId } })
+                    this.messagesList = response.data.messages
+                }
+            } catch (err) {
+                console.error(err)
+            }
         }
     },
 
     computed: {
         connectedUsers () {
-            this.changes(state.connectedUsers)
-            return state.connectedUsers
+            const filterUniqueUsernames = (arr) => {
+                const uniqueUsernames = new Set();
+                return arr.filter(obj => {
+                    if (!uniqueUsernames.has(obj.username)) {
+                        uniqueUsernames.add(obj);
+                        return true;
+                    }
+                    return false;
+                });
+            };
+            return filterUniqueUsernames(state.connectedUsers)
         }
     },
 }

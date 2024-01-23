@@ -40,33 +40,45 @@ sequelize.sync()
       });
 
       io.use((socket, next) => {
-         const username = socket.handshake.auth.username;
+         const username = socket.handshake.auth.username
+         const id = socket.handshake.auth.userId
          if (!username) {
-            return next(new Error("invalid username"));
+            return next(new Error("invalid username"))
          }
          console.log(username)
-         socket.username = username;
-         next();
+         socket.username = username
+         socket.userId = id
+         next()
       });
 
       io.on("connection", (socket) => {
          const users = [];
          for (let [id, socket] of io.of("/").sockets) {
             users.push({
-               userID: id,
+               userId: socket.userId,
                username: socket.username,
-            });
+            })
          }
          socket.emit("users", users);
-      });
+      })
+
+      io.on('connection', (socket) => {
+         socket.on('new message', ({ content, to }) => {
+            socket.to(to).to(socket.username).emit('new message', {
+               content,
+               from: socket.username,
+               to,
+            })
+         })
+      })
 
       io.on("connection", (socket) => {
          // notify existing users
          socket.broadcast.emit("user connected", {
-            userID: socket.id,
+            userId: socket.userId,
             username: socket.username,
-         });
-      });
+         })
+      })
    })
    .catch(err => {
       console.log(err)

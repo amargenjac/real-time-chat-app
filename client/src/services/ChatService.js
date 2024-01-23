@@ -19,6 +19,14 @@ const ChatService = {
                 'Authorization': `Bearer ${token}`
             }
         })
+    },
+
+    startChatWithUser (token, body) {
+        return Api().put('create-chat', body, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
     }
 }
 export default ChatService
