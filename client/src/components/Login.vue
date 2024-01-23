@@ -44,7 +44,11 @@ export default {
           email: this.email,
           password: this.password
         })
-        localStorage.setItem('token', response.data.token)
+        console.log(response)
+        const token = response.data.token
+        const user = response.data.user
+        localStorage.setItem('token', token)
+        localStorage.setItem('user', JSON.stringify(user))
         let users = response.data.users
         this.$router.push({
           name: 'HomeView',
@@ -52,6 +56,7 @@ export default {
         })
       } catch (e) {
         this.error = e.response.data.message
+        console.error(e)
       }
     },
     redirectToRegister () {

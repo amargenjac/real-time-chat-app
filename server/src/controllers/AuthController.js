@@ -1,10 +1,10 @@
 const User = require('../models/User')
 const AuthUtils = require('../utils/authUtils')
-const {GetUsers} = require('../services/UserService')
+const { GetUsers } = require('../services/UserService')
 
-module.exports = { 
-    async Register (req, res){
-        try{
+module.exports = {
+    async Register (req, res) {
+        try {
             let body = req.body
             const hashedPassword = await AuthUtils.encryptPassword(body)
             body.isOnline = 0
@@ -14,41 +14,41 @@ module.exports = {
                 status: 'Success',
                 message: 'User has been registered'
             })
-        } catch (err){
+        } catch (err) {
             console.error(err)
             return res.status(400).json({
                 status: 'Error',
-                message:'Email already exists. Please try another email.'
+                message: 'Email already exists. Please try another email.'
             })
         }
     },
-    async Login (req, res){
-        try{
-            const {email, password} = req.body
+    async Login (req, res) {
+        try {
+            const { email, password } = req.body
             let user = await User.findOne({
-                where: {email: email}
+                where: { email: email }
             })
-            if(!user){
+            if (!user) {
                 return res.status(400).json({
                     status: 'Error',
-                    message:'The login information was incorrect'
+                    message: 'The login information was incorrect'
                 })
             }
             const isValid = await AuthUtils.isPasswordValid(password, user.password)
-            if(!isValid){
+            if (!isValid) {
                 return res.status(400).json({
                     status: 'Error',
-                    message:'The login information was incorrect'
+                    message: 'The login information was incorrect'
                 })
             }
-            await User.update({isOnline: true}, {
+            await User.update({ isOnline: true }, {
                 where: {
                     id: user.id
                 }
             })
 
             user = await User.findOne({
-                where: {email: email}
+                where: { email: email }
             })
 
             const users = await GetUsers(user.id)
@@ -58,14 +58,15 @@ module.exports = {
             return res.status(200).json({
                 status: 'Success',
                 token: token,
+                user: user,
                 users: users
-                })
-        } catch(err){
+            })
+        } catch (err) {
             console.error(err)
-           return res.status(500).json({
-            status: 'Error',
-            message: 'Something went wrong'
-           })
+            return res.status(500).json({
+                status: 'Error',
+                message: 'Something went wrong'
+            })
         }
-        }
+    }
 }

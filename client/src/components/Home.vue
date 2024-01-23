@@ -1,14 +1,24 @@
 <template>
     <v-layout class="rounded rounded-md">
-        <v-app-bar>
-            <v-btn variant="tonal" class="app-button">Create Group</v-btn>
-            <v-btn variant="tonal" class="app-button">New Conversation</v-btn>
-        </v-app-bar>
+        <v-app-bar color="surface-variant" title="Application bar"></v-app-bar>
 
         <v-navigation-drawer>
-            <h3 class="chat-text">Chats</h3>
             <v-list>
-                <v-list-item v-for="(chat, index) in chats" :key="chat.name" @click="openChat(chat)">
+                <v-list-item title="Online"></v-list-item>
+                <v-list-item v-for="(user, index) in connectedUsers" :key="index" @click="startChatWithConnecteduser(chat)">
+                    <v-list-item-content>
+                        <v-btn variant="tonal" class="chat-card">
+                            <v-list-item-title>{{ user.username }}</v-list-item-title>
+                        </v-btn>
+                    </v-list-item-content>
+                </v-list-item>
+            </v-list>
+        </v-navigation-drawer>
+
+        <v-navigation-drawer location="right">
+            <v-list>
+                <v-list-item title="Chats"></v-list-item>
+                <v-list-item v-for="(chat, index) in chats" :key="index" @click="openChat(chat)">
                     <v-list-item-content>
                         <v-btn variant="tonal" class="chat-card">
                             <v-list-item-title>{{ chat.name }}</v-list-item-title>
@@ -24,10 +34,13 @@
     </v-layout>
 </template>
 
+
+
 <script>
 import UserService from '../services/UserService'
 import ChatView from './Chat.vue'
 import ChatService from '../services/ChatService'
+import { state, socket } from "@/socket"
 export default {
     name: 'HomeView',
     components: {
@@ -37,14 +50,21 @@ export default {
         return {
             chats: null,
             isChatOpen: false,
-            messagesList: []
+            messagesList: [],
+            onlineUsers: []
         }
     },
     async mounted () {
-        const response = await UserService.getUserChats(localStorage.getItem('token'))
-        console.log(response.data.userChats)
-        this.chats = response.data.userChats
-        console.log(this.chats)
+        try {
+            const user = JSON.parse(localStorage.getItem('user'))
+            const username = user.username
+            socket.auth = { username }
+            socket.connect()
+            const response = await UserService.getUserChats(localStorage.getItem('token'))
+            this.chats = response.data.userChats
+        } catch (e) {
+            console.error(e)
+        }
     },
 
     methods: {
@@ -55,8 +75,19 @@ export default {
             }
             const response = await ChatService.getChatMessages(localStorage.getItem('token'), params)
             this.messagesList = response.data.message
+            this.isChatOpen = true
+        },
+        changes (newConnected) {
+            this.onlineUsers = newConnected
         }
-    }
+    },
+
+    computed: {
+        connectedUsers () {
+            this.changes(state.connectedUsers)
+            return state.connectedUsers
+        }
+    },
 }
 </script>
 

@@ -5,24 +5,25 @@ exports.SendMessage = async (req, res) => {
     const chatId = req.query.id
     const messageBody = req.body.messageText
     const senderId = req.body.user.id
-    if(!chatId){
+    if (!chatId) {
         return res.status(400).json({
-            status:"Error",
-            message:"Bad request"
+            status: "Error",
+            message: "Bad request"
         })
     }
-    try{
+    try {
         const chat = await Chat.findOne({
-            where:{
-            id: chatId  
+            where: {
+                id: chatId
             }
         })
 
-        if(!chat){
+        if (!chat) {
             return res.status(400).json({
-                status:"Error",
-                message:"Bad request"
-        })}
+                status: "Error",
+                message: "Bad request"
+            })
+        }
 
         const newMessage = {
             messageText: messageBody,
@@ -34,8 +35,8 @@ exports.SendMessage = async (req, res) => {
             status: 'Success',
             message: message
         })
-    }catch(err){
+    } catch (err) {
         console.error(err)
     }
-    
+
 }

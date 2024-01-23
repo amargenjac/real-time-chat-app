@@ -1,4 +1,5 @@
 const express = require('express')
+const socketIO = require('socket.io');
 const bodyParser = require('body-parser')
 const cors = require('cors')
 const morgan = require('morgan')
@@ -19,8 +20,8 @@ app.use(bodyParser.json())
 app.use(cors())
 
 Message.belongsTo(Chat)
-Chat.belongsToMany(User, {through: GroupMembers})
-User.belongsToMany(Chat, {through: GroupMembers})
+Chat.belongsToMany(User, { through: GroupMembers })
+User.belongsToMany(Chat, { through: GroupMembers })
 
 
 app.use(authRoutes)
@@ -31,7 +32,41 @@ app.use(userRoutes)
 sequelize.sync()
    .then(result => {
       console.log(result)
-      app.listen(config.port)
+      const server = app.listen(config.port)
+      const io = socketIO(server, {
+         cors: {
+            origin: "http://localhost:8080"
+         }
+      });
+
+      io.use((socket, next) => {
+         const username = socket.handshake.auth.username;
+         if (!username) {
+            return next(new Error("invalid username"));
+         }
+         console.log(username)
+         socket.username = username;
+         next();
+      });
+
+      io.on("connection", (socket) => {
+         const users = [];
+         for (let [id, socket] of io.of("/").sockets) {
+            users.push({
+               userID: id,
+               username: socket.username,
+            });
+         }
+         socket.emit("users", users);
+      });
+
+      io.on("connection", (socket) => {
+         // notify existing users
+         socket.broadcast.emit("user connected", {
+            userID: socket.id,
+            username: socket.username,
+         });
+      });
    })
    .catch(err => {
       console.log(err)

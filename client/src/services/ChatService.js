@@ -11,5 +11,14 @@ const ChatService = {
             }
         })
     },
+    sendMessage (token, params, body) {
+        return Api().post('chat', body, {
+            params: { id: params },
+            paramsSerializer: (params) => qs.stringify(params.id, { encode: false }),
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
+    }
 }
 export default ChatService

@@ -18,10 +18,14 @@
 </template>
 
 <script>
+import { socket } from '@/socket'
 export default {
   name: 'App',
   components: {
   }
+}
+window.onbeforeunload = function () {
+  socket.disconnect()
 }
 </script>
 
