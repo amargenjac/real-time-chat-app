@@ -16,6 +16,9 @@ With these commands you will finish instalation of required dependencies for the
 #### Custom config file
 To run the application, this application requires a custom configuration file, format of the file should be as it is below:
 
+![Screenshot 2024-01-24 011424](https://github.com/amargenjac/real-time-chat-app/assets/76213933/a11053c6-976c-406a-9bd4-11881a69fc08)
+
+This file should be saved under **server/src/config/config.js**
 
 ### Starting the client and server
 After the config file is set, from root folder run the commands:
