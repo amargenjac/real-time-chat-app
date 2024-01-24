@@ -16,7 +16,7 @@ router.put('/create-chat', ValidateToken, CreateChat)
 router.get('/chat', ValidateToken, GetChat)
 router.post('/chat', rateLimit({
     windowMs: 1 * 60 * 1000, // 1 minute
-    max: 2
+    max: 30
 }), ValidateToken, ValidateMessage, SendMessage)
 
 module.exports = router
