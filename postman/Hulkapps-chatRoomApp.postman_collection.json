@@ -1,0 +1,220 @@
+{
+	"info": {
+		"_postman_id": "74026ad6-14c8-4715-b9b9-e82877123393",
+		"name": "Hulkapps/chatRoomApp",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "24139785"
+	},
+	"item": [
+		{
+			"name": "Register",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\":\"amar.genjac@hotmail.com\",\r\n    \"password\": \"adsadsadasda\",\r\n    \"username\": \"test\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8081/register",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\":\"amar.genjac22@hotmail.com\",\r\n    \"password\": \"adsadsadasda\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8081/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Chat",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJlbWFpbCI6ImFtYXIuZ2VuamFjNEBob3RtYWlsLmNvbSIsInVzZXJuYW1lIjoidGVzdDQiLCJpc09ubGluZSI6MCwiY3JlYXRlZEF0IjoiMjAyNC0wMS0yMFQyMTowODozMy4wMDBaIiwidXBkYXRlZEF0IjoiMjAyNC0wMS0yMFQyMTowODozMy4wMDBaIn0sImlhdCI6MTcwNTc4NDkyNywiZXhwIjoxNzA1ODcxMzI3fQ.yG0-L04tPfF3ddWuPj2xG2JQtVU3BSgzyDl7-EmU_7w",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"receiverId\" : \"2\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8081/create-chat",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"create-chat"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Chat",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "Send Message",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoyLCJlbWFpbCI6ImFtYXIuZ2VuamFjQGhvdG1haWwuY29tIiwidXNlcm5hbWUiOiJ0ZXN0IiwiaXNPbmxpbmUiOjAsImNyZWF0ZWRBdCI6IjIwMjQtMDEtMjBUMjE6MDg6NDMuMDAwWiIsInVwZGF0ZWRBdCI6IjIwMjQtMDEtMjBUMjE6MDg6NDMuMDAwWiJ9LCJpYXQiOjE3MDU3ODYwMTMsImV4cCI6MTcwNTg3MjQxM30.2Y4wZJH4Oppk2GvunqHGL6p5tyq0R48wxBtheUC21us",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"messageText\":\"This is the response to the first message!\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8081/chat?id=263f1131-2a56-4fce-b10e-7a0c9b63cadd",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"chat"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "263f1131-2a56-4fce-b10e-7a0c9b63cadd"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Group",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"groupName\": \"First Group\",\r\n    \"groupMembers\": [2,3]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8081/create-group",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"create-group"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get User Chats",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjozLCJlbWFpbCI6ImFtYXIuZ2VuamFjMjJAaG90bWFpbC5jb20iLCJ1c2VybmFtZSI6InRlc3QyMiIsImlzT25saW5lIjoxLCJjcmVhdGVkQXQiOiIyMDI0LTAxLTIwVDIyOjAyOjQyLjAwMFoiLCJ1cGRhdGVkQXQiOiIyMDI0LTAxLTIzVDE5OjM0OjU3LjAwMFoifSwiaWF0IjoxNzA2MDM4NDk3LCJleHAiOjE3MDYxMjQ4OTd9.tvW21oCHad1ZPwaHCPQGDDB54MsGjki1cHAsnmB62e8",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8081/user-chats",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"user-chats"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
