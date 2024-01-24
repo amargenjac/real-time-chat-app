@@ -5,7 +5,10 @@ export const state = reactive({
     connected: false,
     connectedUsers: [],
     user: null,
-    messages: null
+    UserChats: [{
+        chatId: null,
+        messages: []
+    }]
 });
 
 // "undefined" means the URL will be computed from the `window.location` object
@@ -30,6 +33,10 @@ socket.on('users', (users) => {
     })
 })
 
+socket.on('disconnect', () => {
+    state.connectedUsers.filter(user => user == state.user)
+})
+
 socket.on('user connected', (user) => {
     state.connectedUsers.forEach((element) => {
         if (user.username == element.username) return;
@@ -39,8 +46,12 @@ socket.on('user connected', (user) => {
 });
 
 socket.on('new message', (content, from, to) => {
-    console.log(content, from, to)
+    let userChatIndex = state.UserChats.findIndex(userChat => userChat.chatId == to)
+    if (userChatIndex != -1) {
+        const message = {
+            content: content,
+            senderUsername: from
+        }
+        state.UserChats[userChatIndex].messages.push(message)
+    }
 })
-socket.on("bar", (...args) => {
-    state.barEvents.push(args);
-});

@@ -2,8 +2,8 @@
     <div class="wrapper">
         <v-list>
             <div class="message-wrapper">
-                <v-list-item class="list-messages" v-for="(message, index) in messages" :key="index"
-                    :title="message.senderId" :subtitle="message.messageText" />
+                <v-list-item class="list-messages" v-for="(message, index) in userChat" :key="index"
+                    :title="message.senderUsername" :subtitle="message.messageText" />
             </div>
             <br>
         </v-list>
@@ -18,25 +18,23 @@
 
 <script>
 import ChatService from '@/services/ChatService'
-import { socket } from '@/socket'
+import { socket, state } from '@/socket'
 
 
 export default {
     name: 'ChatView',
     data () {
         return {
-            textMessage: ''
+            userChat: state.UserChats.find(userChat => userChat.chatId == this.$route.query.id).messages
         }
     },
     components: {
     },
     props: [
-        'messages',
     ],
     methods: {
         async sendMessage () {
             try {
-                //const user = JSON.parse(localStorage.getItem('user'))
                 const body = {
                     messageText: this.textMessage
                 }
@@ -45,9 +43,9 @@ export default {
                 }
                 await ChatService.sendMessage(localStorage.getItem('token'), params, body)
 
-                socket.emit("private message", {
+                socket.emit("new message", {
                     content: this.textMessage,
-                    to: this.selectedUser.userID,
+                    to: this.$route.query.id,
                 });
 
             } catch (e) {

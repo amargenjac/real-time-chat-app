@@ -23,7 +23,6 @@ Message.belongsTo(Chat)
 Chat.belongsToMany(User, { through: GroupMembers })
 User.belongsToMany(Chat, { through: GroupMembers })
 
-
 app.use(authRoutes)
 app.use(groupRoutes)
 app.use(chatRoutes)
@@ -64,7 +63,7 @@ sequelize.sync()
 
       io.on('connection', (socket) => {
          socket.on('new message', ({ content, to }) => {
-            socket.to(to).to(socket.username).emit('new message', {
+            socket.broadcast.emit('new message', {
                content,
                from: socket.username,
                to,

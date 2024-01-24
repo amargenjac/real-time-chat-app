@@ -2,6 +2,7 @@ const Message = require('../models/Message')
 const Chat = require('../models/Chat')
 
 exports.SendMessage = async (req, res) => {
+
     const chatId = req.query.id
     const messageBody = req.body.messageText
     const senderId = req.body.user.id

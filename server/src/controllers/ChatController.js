@@ -65,7 +65,6 @@ exports.CreateChat = async (req, res) => {
                 chatId: chat.id
             }
         })
-        console.log(chat.id)
         res.status(200).json({
             status: 'Success',
             chatId: chat.id,

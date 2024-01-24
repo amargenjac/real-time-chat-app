@@ -42,8 +42,11 @@ export default {
                     password: this.password
                 })
                 console.log(response.data)
+                if (response.data.status == 'Success') {
+                    this.redirectToLogin()
+                }
             } catch (e) {
-                this.error = e.response.data.error
+                this.error = e.response.data.message
             }
         },
         redirectToLogin () {
