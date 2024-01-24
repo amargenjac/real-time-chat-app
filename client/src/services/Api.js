@@ -2,6 +2,6 @@ import axios from 'axios'
 
 export default () => {
   return axios.create({
-    baseURL: 'http://localhost:8081'
+    baseURL: 'https://hulkapps-chatapp-0b039a154f89.herokuapp.com/'
   })
 }

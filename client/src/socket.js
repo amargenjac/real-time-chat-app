@@ -12,7 +12,7 @@ export const state = reactive({
 });
 
 // "undefined" means the URL will be computed from the `window.location` object
-const URL = "http://localhost:8081";
+const URL = "https://hulkapps-chatapp-0b039a154f89.herokuapp.com/";
 
 export const socket = io(URL);
 
